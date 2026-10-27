@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10111b">
+  <title>BOOK6MATCH7 — найди свою книгу</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+  <header class="topbar">
+    <a class="brand" href="/"><span class="brand-icon">B</span><span>BOOK<span class="brand-accent">6MATCH7</span></span></a>
+    <div class="top-note"><span class="live-dot"></span> Твоя следующая любимая книга</div>
+    <a class="about-link" href="#about">О проекте <span>↗</span></a>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow"><span class="eyebrow-line"></span> ЧИТАЙ ПО-СВОЕМУ</div>
+      <h1><br>BOOK6MATCH7 — найди свою книгу<span>.</span></h1>
+      <p class="hero-subtitle">Книга, которая попадёт в твоё настроение.</p>
+      <p class="hero-instruction">Выбери подходящие параметры — жанр, читабельный объём и предпочтения. BOOK6MATCH7 тебе в этом поможет!</p>
+      <div class="hero-stats">
+        <div><strong>{{ total }}+</strong><span>книг в каталоге</span></div>
+        <i></i><div><strong>4</strong><span>типа чтения</span></div><i></i><div><strong>0</strong><span>случайных советов</span></div>
+      </div>
+      <div class="scroll-hint"><span class="scroll-mouse"></span> ПОДБЕРИ КНИГУ НИЖЕ</div>
+    </section>
+
+    <section class="finder" id="finder">
+      <div class="section-heading"><div><div class="eyebrow">ПЕРСОНАЛЬНЫЙ ПОДБОР</div><h2>Выбери всё, что тебе подходит</h2><p class="section-intro">Укажи жанр, читабельный объём и то, что тебе интересно читать.</p></div><span class="step-label">01 <span>/ 03</span></span></div>
+      <form id="search-form">
+        <div class="field-block">
+          <label for="genre">01 <span>ЖАНР</span></label>
+          <select id="genre" name="genre"><option value="">Любой жанр</option>{% for genre in genres %}<option value="{{ genre }}">{{ genre }}</option>{% endfor %}</select>
+        </div>
+        <div class="field-block">
+          <label for="max_pages">02 <span>ОБЪЁМ КНИГИ</span></label>
+          <select id="max_pages" name="max_pages">
+            <option value="">Объём не важен</option>
+            <option value="100">До 100 страниц</option><option value="150">До 150 страниц</option>
+            <option value="200">До 200 страниц</option><option value="300">До 300 страниц</option>
+            <option value="500">До 500 страниц</option><option value="1000">До 1000 страниц</option>
+          </select>
+        </div>
+        <div class="field-block preference-field">
+          <label>03 <span>ЧТО ТЫ ИЩЕШЬ?</span></label>
+          <div class="preference-grid">
+            <label class="pref-card"><input type="radio" name="preference" value="Захватывающий сюжет"><span class="pref-icon">◈</span><span class="pref-title">Захватывающий сюжет</span><span class="pref-desc">Не оторваться до конца</span><span class="radio-mark"></span></label>
+            <label class="pref-card"><input type="radio" name="preference" value="Лёгкое чтение"><span class="pref-icon">☼</span><span class="pref-title">Лёгкое чтение</span><span class="pref-desc">Отдых для головы</span><span class="radio-mark"></span></label>
+            <label class="pref-card"><input type="radio" name="preference" value="Глубокий смысл"><span class="pref-icon">⌘</span><span class="pref-title">Глубокий смысл</span><span class="pref-desc">Есть о чём подумать</span><span class="radio-mark"></span></label>
+            <label class="pref-card"><input type="radio" name="preference" value="Много приключений"><span class="pref-icon">✳</span><span class="pref-title">Много приключений</span><span class="pref-desc">Путешествия и открытия</span><span class="radio-mark"></span></label>
+          </div>
+          <label class="any-pref"><input type="radio" name="preference" value="" checked><span class="any-check">✓</span> Предпочтение не важно</label>
+        </div>
+        <div class="form-actions"><button class="search-button" type="submit"><span>Найти мою книгу</span><span class="button-arrow">↗</span></button><button class="reset-button" type="reset" id="reset-button">Сбросить фильтры</button></div>
+      </form>
+    </section>
+
+    <section class="results-section" id="results">
+      <div class="results-header"><div><div class="eyebrow">ТВОЯ ПОДБОРКА</div><h2 id="results-title">Книги ждут тебя</h2></div><div class="result-count" id="result-count">{{ total }} книг <span>в каталоге</span></div></div>
+      <div id="results-grid" class="results-grid">
+        <div class="empty-state"><div class="empty-symbol">✳</div><h3>Твое хобби начинается здесь</h3><p>Выбери жанр, объём или настроение, чтобы найти подходящую книгу.</p></div>
+      </div>
+      <button id="show-more" class="show-more" hidden>Показать ещё <span>↓</span></button>
+    </section>
+
+    <section class="quote-section"><span class="quote-mark">“</span><p></p><span class="quote-caption">Гораздо легче понять, что читать, когда знаешь, где искать.</span></section>
+    <section class="about-section" id="about"><div><div class="eyebrow">О ПРОЕКТЕ</div><h2>Технологии помогают<br>найти свою историю.</h2></div><p>BOOK6MATCH7 — учебный проект о том, как цифровые технологии могут сделать чтение доступнее и помочь читателю ориентироваться в мире книг. Подбор работает по жанру, объёму и интересам.</p></section>
+  </main>
+  <footer class="project-footer"><div class="footer-project-title">УЧЕБНЫЙ ПРОЕКТ</div><h2>Книга в эпоху 67 технологий</h2><p>Выполнили ученики 9 «В» класса</p><div class="student-names"><span>Худойназаров Бехруз Шавкатджонович</span><span>Колесов Владислав Игоревич</span></div><div class="footer-bottom"><a class="brand footer-brand" href="/"><span class="brand-icon">B</span><span>BOOK<span class="brand-accent">6MATCH7</span></span></a><span>© 2026 BOOK6MATCH7</span></div></footer>
+  <script>
+    const form = document.querySelector('#search-form');
+    const grid = document.querySelector('#results-grid');
+    const count = document.querySelector('#result-count');
+    const title = document.querySelector('#results-title');
+    const more = document.querySelector('#show-more');
+    let allResults = [], visible = 8;
+    const escapeHTML = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const covers = ['cover-violet','cover-blue','cover-orange','cover-green','cover-pink','cover-dark'];
+    function card(book, index) {
+      const initials = book.title.split(/\s+/).slice(0,2).map(x => x[0]).join('').toUpperCase();
+      return `<article class="book-card"><div class="book-cover ${covers[index % covers.length]}"><span class="cover-top">BOOK6MATCH7 SELECT</span><span class="cover-initials">${escapeHTML(initials)}</span><span class="cover-bottom">${escapeHTML(book.genre.toUpperCase())}</span><span class="cover-decoration"></span></div><div class="book-info"><div class="book-meta"><span>${escapeHTML(book.genre)}</span><span>${book.pages} стр.</span></div><h3>${escapeHTML(book.title)}</h3><p class="book-author">${escapeHTML(book.author)}</p><p class="book-description">${escapeHTML(book.description)}</p><div class="book-tags">${book.preferences.slice(0,2).map(p=>`<span>${escapeHTML(p)}</span>`).join('')}</div></div></article>`;
+    }
+    function render() {
+      count.innerHTML = `${allResults.length} книг <span>найдено</span>`;
+      title.textContent = allResults.length ? 'Подобрали для тебя' : 'Попробуем иначе?';
+      if (!allResults.length) {
+        grid.innerHTML = `<div class="empty-state"><div class="empty-symbol">⌕</div><h3>Пока ничего не найдено</h3><p>Слишком строгие фильтры. Попробуй выбрать другой жанр или увеличить объём книги.</p><button class="inline-reset" id="inline-reset">Сбросить фильтры ↗</button></div>`;
+        more.hidden = true;
+        document.querySelector('#inline-reset').onclick = () => { form.reset(); searchBooks(); };
+        return;
+      }
+      grid.innerHTML = allResults.slice(0, visible).map(card).join('');
+      more.hidden = visible >= allResults.length;
+      more.innerHTML = `Показать ещё <span>↓</span> <small>${Math.min(allResults.length-visible, 8)} из ${allResults.length-visible}</small>`;
+    }
+    async function searchBooks() {
+      const data = Object.fromEntries(new FormData(form).entries());
+      const button = form.querySelector('.search-button');
+      button.disabled = true;
+      button.querySelector('span:first-child').textContent = 'Ищем книги…';
+      try {
+        const response = await fetch('/api/search', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(data)});
+        if (!response.ok) throw new Error('Search request failed');
+        const payload = await response.json();
+        if (!payload || !Array.isArray(payload.books)) throw new Error('Invalid catalogue response');
+        allResults = payload.books; visible = 8; render();
+        document.querySelector('#results').scrollIntoView({behavior:'smooth', block:'start'});
+      } catch (error) {
+        grid.innerHTML = '<div class="empty-state"><h3>Не удалось загрузить каталог</h3><p>Обнови страницу и попробуй ещё раз.</p></div>';
+      } finally {
+        button.disabled = false;
+        button.querySelector('span:first-child').textContent = 'Найти мою книгу';
+      }
+    }
+    form.addEventListener('submit', e => { e.preventDefault(); searchBooks(); });
+    form.addEventListener('reset', () => setTimeout(() => { allResults=[]; visible=8; grid.innerHTML='<div class="empty-state"><div class="empty-symbol">✳</div><h3>Твоя история начинается здесь</h3><p>Выбери жанр, объём или настроение, чтобы найти подходящую книгу.</p></div>'; count.innerHTML='{{ total }} книг <span>в каталоге</span>'; title.textContent='Книги ждут тебя'; more.hidden=true; }, 0));
+    document.querySelector('#reset-button').addEventListener('click', () => {});
+    more.addEventListener('click', () => { visible += 8; render(); });
+    // Browser speech recognition, where supported.
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (SpeechRecognition) {
+      const voice = document.createElement('button');
+      voice.type='button'; voice.className='voice-button'; voice.innerHTML='🎙 Поиск голосом';
+      voice.title='Например: фэнтези до 200 страниц, много приключений';
+      document.querySelector('.form-actions').prepend(voice);
+      voice.addEventListener('click', () => {
+        const recognition = new SpeechRecognition(); recognition.lang='ru-RU'; recognition.interimResults=false;
+        voice.textContent='Слушаю…';
+        recognition.onresult = e => {
+          const text = e.results[0][0].transcript.toLowerCase();
+          const genreSelect = document.querySelector('#genre');
+          const genre = [...genreSelect.options].find(o => o.value && text.includes(o.value.toLowerCase()));
+          if (genre) genreSelect.value=genre.value;
+          const pages = text.match(/(?:до|не больше|меньше)\s*(\d{2,4})\s*(?:страниц|страницы|страницу)?/);
+          if (pages) {
+            const options=[...document.querySelector('#max_pages').options].filter(o=>o.value).map(o=>Number(o.value));
+            const target=Number(pages[1]); const nearest=options.find(n=>n>=target) || options[options.length-1];
+            document.querySelector('#max_pages').value=String(nearest);
+          }
+          const prefs = ['Захватывающий сюжет','Лёгкое чтение','Глубокий смысл','Много приключений'];
+          const aliases = [['сюжет','захватывающий'],['лёгкое чтение','легкое чтение','легко'],['смысл','глубокий'],['приключения','приключений']];
+          const found=prefs.find((p,i)=>aliases[i].some(a=>text.includes(a)));
+          if(found) { const radio=document.querySelector(`input[name="preference"][value="${found}"]`); if(radio) radio.checked=true; }
+          searchBooks(); voice.innerHTML='🎙 Поиск голосом';
+        };
+        recognition.onerror=()=>{voice.innerHTML='🎙 Поиск голосом'; alert('Не удалось распознать речь. Проверь доступ к микрофону.');};
+        recognition.onend=()=>{voice.innerHTML='🎙 Поиск голосом';};
+        recognition.start();
+      });
+    }
+  </script>
+</body>
+</html>
